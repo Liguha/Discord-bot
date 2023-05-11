@@ -1,0 +1,10 @@
+{
+    "prefix":">",
+    "vprefix":"жаба",
+    "recognition":
+    {
+        "vprefix":"вызов",
+        "play":"включи",
+        "skip":"пропуск"
+    }
+}
