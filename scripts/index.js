@@ -47,4 +47,6 @@ client.on("messageCreate", (message) =>
         command_recognize(client, message);
 });
 
+client.on("error", (err) => console.log("Error!"));
+
 client.login(static_config.bot_token);
