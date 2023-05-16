@@ -56,7 +56,6 @@ async function command_recognize(client, message)
         if (speech == '' || !speech)
             return;
         var args = speech.split(' ');
-        console.log(message.member.nickname + ": " + args);
         while (args.length > 0)
         {
             if (args.shift() === config.vprefix)

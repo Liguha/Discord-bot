@@ -1,7 +1,5 @@
 {
     "bot_token": "тут токен бота Discord",
-    "google_api": "тут API ключ гугла",
-    "youtube_coockie": "тут ютубовские coockie-файлы залогиненого акка, чтобы бот мог находить видео 18+",
     "openai_api": 
     [
         "тут API ключ OpenAI"

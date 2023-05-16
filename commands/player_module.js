@@ -1,8 +1,7 @@
 const config = require("../json/static_config.json");
 const errors = require("../json/error_reports.json");
 const { rephrase } = require("./openai_module.js");
-const ytdl = require("ytdl-core");
-const searchYoutube = require('youtube-api-v3-search');
+const playdl = require("play-dl");
 const { getVoiceConnection, joinVoiceChannel, VoiceConnectionStatus } = require('@discordjs/voice');
 const { createAudioResource, AudioPlayerStatus } = require('@discordjs/voice');
 const { createAudioPlayer, NoSubscriberBehavior } = require('@discordjs/voice');
@@ -37,18 +36,14 @@ async function prepare_args(args)
         query += " " + args.shift();
     if (query.length > 0)
         query = query.slice(1);
-    var res = await searchYoutube(config.google_api, 
-    {   
-        q: query,
-        part: 'snippet',
-        type: 'video',
-        maxResults: 1 
+    var res = await playdl.search(query, 
+    {
+        limit: 1
     });
-    if (res.items.length == 0)
+    if (res.length == 0)
         return null;
-    var url = "https://www.youtube.com/watch?v=" + res.items[0].id.videoId;
-    var is_live = res.items[0].snippet.liveBroadcastContent == 'live';
-    return [query, url, is_live];
+    var url = res[0].url;
+    return [query, url];
 }
 
 async function queue_shift()
@@ -60,52 +55,13 @@ async function queue_shift()
     }
     var q = songsQueue[0];
     var query = q[0];
-    var url = q[1];
-    var is_live = q[2];
+    var url = q[1];  
 
-    if (!ytdl.validateURL(url))
+    var stream = await playdl.stream(url);
+    var resource = createAudioResource(stream.stream, 
     {
-        songsQueue.shift();
-        queue_shift();
-        return;
-    }
-
-    var frames = 5;
-    var options = 
-    {
-        filter: 'audioonly',
-        quality: 'highestaudio',
-        highWaterMark: 1 << 25,
-        requestOptions: 
-        {
-            headers: 
-            {
-                Cookie: config.youtube_coockie
-            }
-        }
-    };
-    if (is_live)
-    {
-        frames = 100;
-        options = 
-        {
-            liveBuffer: 4900,
-            quality: 'lowestaudio',
-            highWaterMark: 1 << 25,
-            requestOptions: 
-            {
-                headers: 
-                {
-                    Cookie: config.youtube_coockie
-                }
-            }
-        };
-    }    
-
-    var stream = ytdl(url, options);
-    var resource = createAudioResource(stream, 
-    {
-        silencePaddingFrames: frames,
+        silencePaddingFrames: 50,
+        inputType: stream.type,
         metadata: 
         {
             title: query,
@@ -167,7 +123,7 @@ async function command_queue(message)
     message.channel.send(msg);
 }
 
-async function command_skip(message)
+async function command_skip(message, args)
 {
     if (songsQueue.length === 0)
     {
