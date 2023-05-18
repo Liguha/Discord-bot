@@ -26,17 +26,13 @@ function clear_recognize(audio, rec, connection, message, onData, onEnd, onVoice
 async function command_recognize(client, message)
 {
     if (!same_voice(message))
-    {
-        message.channel.send(await rephrase(errors.recognition_module.different));
-        return;
-    }
+        return [await rephrase(errors.recognition_module.different)];
 
     if (listen.has(message.member.id))
     {
         var elem = listen.get(message.member.id)
         clear_recognize(elem[0], elem[1], elem[2], elem[3], elem[4], elem[5], elem[6]);
-        message.channel.send("Прекратил слушать " + message.member.toString());
-        return;
+        return ["Прекратил слушать " + message.member.toString()];
     }
     
     const rec = new vosk.Recognizer({model: model, sampleRate: 48000});
@@ -90,7 +86,7 @@ async function command_recognize(client, message)
     audio.on("data", onData);
     message.client.on("voiceStateUpdate", onVoiceStateUpdate);
     listen.set(message.member.id, [audio, rec, connection, message, onData, onEnd, onVoiceStateUpdate]);
-    message.channel.send("Слушаю " + message.member.toString());
+    return ["Слушаю " + message.member.toString()];
 }
 
 module.exports.command_recognize = command_recognize;

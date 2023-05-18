@@ -25,11 +25,12 @@ async function command_join(message)
 {
     if (!alone_in_voice(message))
     {
+        var msg = "";
         if (!same_voice(message))
-            message.channel.send(await rephrase(errors.join.different));
+            msg = await rephrase(errors.join.different);
         else
-            message.channel.send(await rephrase(errors.join.same));
-        return;
+            msg = await rephrase(errors.join.same);
+        return [msg];
     }
     var connection = joinVoiceChannel(
     {
@@ -38,6 +39,7 @@ async function command_join(message)
         adapterCreator: message.guild.voiceAdapterCreator
     });
     fix_connection(connection);
+    return [null];
 }
 
 module.exports.command_join = command_join;

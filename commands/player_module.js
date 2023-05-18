@@ -83,16 +83,17 @@ async function command_play(message, args)
         fix_connection(connection);
         songsQueue = [];
         var query = await prepare_args(args);
+        var msg = "";
         if (query == null)
-            message.channel.send(await rephrase(errors.player_module.not_found));
+            msg = await rephrase(errors.player_module.not_found);
         else
         {
             songsQueue.push(query);
-            message.channel.send(query[0] +  " => " + query[1]);
+            msg = query[0] +  " => " + query[1];
             connection.subscribe(player);
             queue_shift();
         }
-        return;
+        return [msg];
     }
     if (same_voice(message))
     {
@@ -103,39 +104,71 @@ async function command_play(message, args)
             connection.subscribe(player);
         }
         var query = await prepare_args(args);
+        var msg;
         if (query == null)
-            message.channel.send(await rephrase(errors.player_module.not_found));
+            msg = await rephrase(errors.player_module.not_found);
         else
         {
             songsQueue.push(query);
             if (songsQueue.length === 1)
                 queue_shift();
-            message.channel.send(query[0] +  " => " + query[1]);
+            msg = query[0] +  " => " + query[1];
         }
+        return [msg];
     }
 }
 
-async function command_queue(message)
+async function command_queue()
 {
     var msg = "Список запросов:";
     for (var i = 0; i < songsQueue.length; i++)
         msg += "\n" + (i + 1) + ". " + songsQueue[i][0] +  " => <" + songsQueue[i][1] + ">";
-    message.channel.send(msg);
+    return [msg];
 }
 
-async function command_skip(message, args)
+async function command_skip()
 {
     if (songsQueue.length === 0)
-    {
-        message.channel.send(await rephrase(errors.player_module.empty_queue));
-        return;
-    }
+        return [await rephrase(errors.player_module.empty_queue)];
     var skipped = songsQueue.shift();
-    message.channel.send("Пропускаю " + skipped[1]);
     queue_shift();
+    return ["Пропускаю " + skipped[1]];
+}
+
+async function command_remove(args)
+{
+    if (args.length == 0)
+        return [await rephrase(errors.player_module.remove_args)];
+    var l = Number(args[0]);
+    var r = l;
+    if (args.length > 1)
+        r = Number(args[1]);
+    if (isNaN(l) || isNaN(r))
+        return [await rephrase(errors.player_module.remove_args)];
+    l--;
+    r--;
+    if (l < 0 || r >= songsQueue.length || r < l)
+        return [await rephrase(errors.player_module.out_of_queue)];
+    var msg = "Из очереди удалено:";
+    for (var i = l; i <= r; i++)
+    {
+        var k = i + 1;
+        msg += "\n" + k + ". " + songsQueue[i][0] + " => <" + songsQueue[i][1] + ">";
+    }
+    songsQueue.splice(l, r - l + 1);
+    if (l == 0)
+        queue_shift();
+    return [msg];
 }
 
 // подготовка плеера
+playdl.setToken(
+{
+    youtube:
+    {
+        cookie: config.youtube_coockie
+    }
+});
 player = createAudioPlayer(
 {
     behaviors: 
@@ -158,5 +191,6 @@ player.on('error', error =>
 });
 
 module.exports.command_skip = command_skip;
+module.exports.command_remove = command_remove;
 module.exports.command_queue = command_queue;
 module.exports.command_play = command_play;

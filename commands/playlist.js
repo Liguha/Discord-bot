@@ -14,8 +14,7 @@ async function command_playlist(client, message, args)
                 var k = i + 1;
                 msg += "\n" + k + ". " + file.body[i].name;
             }
-            message.channel.send(msg);
-            break;
+            return [msg];
 
         case "info":
             var msg = "";
@@ -31,11 +30,10 @@ async function command_playlist(client, message, args)
                 for (var i = 0; i < file.body[n].size; i++)
                 {
                     var k = i + 1;
-                    msg += "\n      " + k + ". " + file.body[n].tracks[i];
+                    msg += "\n      " + k + "\\. " + file.body[n].tracks[i];
                 }
             }
-            message.channel.send(msg);
-            break;
+            return [msg];
 
         case "create":
             var arg_name = args.shift();
@@ -51,8 +49,7 @@ async function command_playlist(client, message, args)
                     tracks: []
                 });
             file.size++;
-            message.channel.send("Создан плейлист \'" + arg_name + "\'");
-            break;
+            return ["Создан плейлист \'" + arg_name + "\'"];
 
         case "delete":
             var msg = "";
@@ -71,8 +68,7 @@ async function command_playlist(client, message, args)
                     msg += "Удалили плейлист \'" + del_name + "\'";
                 }
             }
-            message.channel.send(msg);
-            break;
+            return [msg];
         
         case "add":
             var msg = "";
@@ -96,8 +92,7 @@ async function command_playlist(client, message, args)
                     msg += "добавлено \'" + arg_name + "\'";
                 }
             }
-            message.channel.send(msg);
-            break;
+            return [msg];
         
         case "remove":
             var msg = "";
@@ -123,24 +118,24 @@ async function command_playlist(client, message, args)
                     }
                 }
             }
-            message.channel.send(msg);
-            break;
+            return [msg];
 
         case "play":
             var n = parseInt(args.shift()) - 1;
+            var msg = "";
             if (n < 0 || n >= file.size || isNaN(n))
-                message.channel.send(await rephrase(errors.playlist.invalid_number1));
+                msg = await rephrase(errors.playlist.invalid_number1);
             else
             {
                 for (var i = 0; i < file.body[n].size; i++)
-                    await command_play(message, [file.body[n].tracks[i]]);
+                {
+                    var k = i + 1;
+                    msg += k + "\. " + (await command_play(message, [file.body[n].tracks[i]])) + "\n";
+                }
             }
-            break;
-
-        default:
-            message.channel.send(await rephrase(errors.playlist.invalid_query));
-            break;
+            return [msg];
     }
+    return [await rephrase(errors.playlist.invalid_query)];
 }
 
 module.exports.command_playlist = command_playlist;

@@ -99,8 +99,7 @@ async function command_chat(message, args)
         history.push(completion.data.choices[0].message);
         msg = make_messages(completion.data.choices[0].message.content);
     }
-    for (var i = 0; i < msg.length; i++)
-        message.channel.send(msg[i]);
+    return msg;
 }
 
 async function command_draw(message, args)
@@ -132,7 +131,7 @@ async function command_draw(message, args)
             str,
             undefined,
             1,
-            "1024x1024"
+            "512x512"
         ).catch(async (err) => ans = await rephrase(errors.openai_module.general));
     }
     else
@@ -141,7 +140,7 @@ async function command_draw(message, args)
         {
             prompt: str,
             n: 1,
-            size: "1024x1024",
+            size: "512x512",
         }).catch(async (err) => ans = await rephrase(errors.openai_module.general));
     }
     if (ans == -1)
@@ -154,14 +153,14 @@ async function command_draw(message, args)
         var stream = await promise;
         ans = {files: [new AttachmentBuilder(stream)]};
     }
-    await message.channel.send(ans);
     ended = true;
+    return [ans];
 }
 
-async function command_refresh(message)
+async function command_refresh()
 {
     history = [];
-    message.channel.send(await rephrase("Я всё забыл"));
+    return [await rephrase("Я всё забыл")];
 }
 
 module.exports.rephrase = rephrase;

@@ -18,8 +18,6 @@
     "openai": "^3.2.1",
     "play-dl": "^1.9.6",
     "tweetnacl": "^1.0.3",
-    "vosk": "^0.3.39",
-    "youtube-api-v3-search": "^1.2.1",
-    "ytdl-core": "^4.11.4"
+    "vosk": "^0.3.39"
   }
 }

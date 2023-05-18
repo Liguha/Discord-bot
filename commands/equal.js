@@ -2,7 +2,7 @@ const config = require("../json/dynamic_config.json");
 const errors = require("../json/error_reports.json");
 const { rephrase } = require("./openai_module.js");
 
-async function command_equal(message, args)
+async function command_equal(args)
 {
     switch (args.shift())
     {
@@ -14,25 +14,18 @@ async function command_equal(message, args)
                 msg += "\n" + i + ". " + key + " = " + config.recognition[key];
                 i++;
             }
-            message.channel.send(msg);
-            break;
+            return [msg];
 
         case "set":
             var orig = args.shift();
             var equal = args.shift();
             if (!orig || !equal)
-            {
-                message.channel.send(await rephrase(errors.equal.set));
-                break;
-            }
+                return [await rephrase(errors.equal.set)];
             config.recognition[orig] = equal;
-            message.channel.send("Установлено: " + orig + " = \'" + config.recognition[orig] + "\'");
-            break;
-            
-        default:
-            message.channel.send(await rephrase(errors.equal.general));
-            break;
+            var msg = "Установлено: " + orig + " = \'" + config.recognition[orig] + "\'";
+            return [msg];
     }
+    return [await rephrase(errors.equal.general)];
 }
 
 module.exports.command_equal = command_equal;

@@ -1,13 +1,12 @@
 const config = require("../json/dynamic_config.json");
 
-function command_vprefix(message, args)
+async function command_vprefix(args)
 {
     var vprefix = "жаба";
     if (args.length > 0)
         vprefix = args.shift();
-    message.channel.send("Установлен голосовой префикс \'" + vprefix + '\'');
     config.vprefix = vprefix;
-
+    return ["Установлен голосовой префикс \'" + vprefix + '\''];
 }
 
 module.exports.command_vprefix = command_vprefix;

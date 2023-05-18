@@ -1,5 +1,6 @@
 {
     "bot_token": "тут токен бота Discord",
+    "youtube_coockie": "тут ютубовские куки",
     "openai_api": 
     [
         "тут API ключ OpenAI"

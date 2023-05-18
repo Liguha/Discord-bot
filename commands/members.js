@@ -6,10 +6,7 @@ async function command_members(message)
 {
     var bot = message.guild.members.me;
     if (bot.voice.channel === null)
-    {
-        message.channel.send(await rephrase(errors.members.alone));
-        return
-    }
+        return [await rephrase(errors.members.alone)];
     var members = bot.voice.channel.members;
     var msg = "Со мной в голосовом канале:";
     var i = 1;
@@ -18,7 +15,7 @@ async function command_members(message)
         msg += "\n" + i + ". " + member.toString();
         i++;
     });
-    message.channel.send(msg);
+    return [msg];
 }
 
 function alone_in_voice(message)
