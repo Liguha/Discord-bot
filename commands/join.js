@@ -19,6 +19,7 @@ function fix_connection(voiceConnection)
         oldNetworking?.off('stateChange', networkStateChangeHandler);
         newNetworking?.on('stateChange', networkStateChangeHandler);
     });
+    voiceConnection.on('error', () => console.log("Error voice")); 
 }
 
 async function command_join(message)

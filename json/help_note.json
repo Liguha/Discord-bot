@@ -1,5 +1,5 @@
 {
-    "general": "Список команд: help, playlist, play, join, skip, queue, recognize, equal, prefix, vprefix, chat, refresh, draw, picture. Для более подробной справки можно указать другие команды аргументами. Например, >help play или >help equal list",
+    "general": "Список команд: help, playlist, play, join, skip, remove, clear, queue, recognize, equal, prefix, vprefix, chat, refresh, draw, picture. Для более подробной справки можно указать другие команды аргументами. Например, >help play или >help equal list",
 
     "help":
     {
@@ -59,6 +59,16 @@
     "skip":
     {
         "general": "Команда для пропуска текущей композиции. Используется без аргументов"
+    },
+
+    "remove":
+    {
+        "general": "Команда для удаления песни или отрезка песен из очереди. Может использоваться с одним аргументом - номер удаляемой композиции (>remove 6) или с двумя аргументами - границы отрезка (>remove 6 9)."
+    },
+
+    "clear":
+    {
+        "general": "Команда для полной очистки очереди проигрывания, используется без аргументов (>clear)."
     },
 
     "queue":

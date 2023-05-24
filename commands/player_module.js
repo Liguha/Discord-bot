@@ -27,6 +27,7 @@ function fix_connection(voiceConnection)
         oldNetworking?.off('stateChange', networkStateChangeHandler);
         newNetworking?.on('stateChange', networkStateChangeHandler);
     });
+    voiceConnection.on('error', () => console.log("Error voice")); 
 }
 
 async function prepare_args(args)
@@ -161,6 +162,12 @@ async function command_remove(args)
     return [msg];
 }
 
+async function command_clear()
+{
+    var n = String(songsQueue.length);
+    return await command_remove(["1", n]);
+}
+
 // подготовка плеера
 playdl.setToken(
 {
@@ -192,5 +199,6 @@ player.on('error', error =>
 
 module.exports.command_skip = command_skip;
 module.exports.command_remove = command_remove;
+module.exports.command_clear = command_clear;
 module.exports.command_queue = command_queue;
 module.exports.command_play = command_play;

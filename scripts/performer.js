@@ -1,4 +1,4 @@
-const { command_play, command_queue, command_skip, command_remove } = require("../commands/player_module.js");
+const { command_play, command_queue, command_skip, command_remove, command_clear } = require("../commands/player_module.js");
 const { command_prefix } = require("../commands/prefix.js");
 const { command_vprefix } = require("../commands/vprefix.js");
 const { command_join } = require("../commands/join.js");
@@ -45,6 +45,10 @@ async function perform_command(client, message, command, args)
 
         case "remove":
             msg = await command_remove(args);
+            break;
+
+        case "clear":
+            msg = await command_clear();
             break;
 
         case "queue":
