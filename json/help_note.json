@@ -1,5 +1,5 @@
 {
-    "general": "Список команд: help, playlist, play, join, skip, remove, clear, queue, recognize, equal, prefix, vprefix, chat, refresh, draw, picture. Для более подробной справки можно указать другие команды аргументами. Например, >help play или >help equal list",
+    "general": "Список команд: help, playlist, play, join, skip, remove, clear, queue, recognize, equal, prefix, vprefix, chat, refresh, draw, picture, anime. Для более подробной справки можно указать другие команды аргументами. Например, >help play или >help equal list",
 
     "help":
     {
@@ -136,5 +136,10 @@
         {
             "general": "Аргумент, регулирующий размер изображения (>picture square Anime art of the girl). Соответствует размерам изображения 512 пикселей в ширину, 512 в высоту."
         }
+    },
+
+    "anime":
+    {
+        "general": "Команда для создания аниме артов, аргументами принимает число - количество изображений (от 1 до 9), после него сам запрос на английском (>anime 3 Girl, long hair, sunset)."
     }
 }

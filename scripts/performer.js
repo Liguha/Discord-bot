@@ -8,6 +8,7 @@ const { command_playlist } = require('../commands/playlist.js');
 const { command_help } = require('../commands/help.js');
 const { command_chat, command_draw, command_refresh } = require("../commands/openai_module.js");
 const { command_picture } = require("../commands/picture.js");
+const { command_anime } = require("../commands/anime.js");
 
 async function perform_command(client, message, command, args)
 {
@@ -81,6 +82,10 @@ async function perform_command(client, message, command, args)
 
         case "picture":
             msg = await command_picture(message, args);
+            break;
+        
+        case "anime":
+            msg = await command_anime(message, args);
             break;
     }
     for (var i = 0; i < msg.length; i++)

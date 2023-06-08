@@ -4,5 +4,6 @@
     "openai_api": 
     [
         "тут API ключ OpenAI"
-    ]
+    ],
+    "anime_api": "тут ключ для prodia"
 }
