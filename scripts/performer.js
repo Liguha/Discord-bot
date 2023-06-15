@@ -12,7 +12,8 @@ const { command_anime } = require("../commands/anime.js");
 
 async function perform_command(client, message, command, args)
 {
-    var msg = [null];
+    var promise = null;
+    var valid = true;
     switch (command)
     {
         case "sum":
@@ -21,78 +22,100 @@ async function perform_command(client, message, command, args)
             break;
 
         case "prefix":
-            msg = await command_prefix(args);
+            promise = command_prefix(args);
             break;
 
         case "vprefix":
-            msg = await command_vprefix(args);
+            promise = command_vprefix(args);
             break;
 
         case "join":
-            msg = await command_join(message);
+            promise = command_join(message);
             break;
 
         case "members":
-            msg = await command_members(message);
+            promise = command_members(message);
             break;
 
         case "play":
-            msg = await command_play(message, args);
+            promise = command_play(message, args);
             break;
 
         case "skip":
-            msg = await command_skip();
+            promise = command_skip();
             break;
 
         case "remove":
-            msg = await command_remove(args);
+            promise = command_remove(args);
             break;
 
         case "clear":
-            msg = await command_clear();
+            promise = command_clear();
             break;
 
         case "queue":
-            msg = await command_queue();
+            promise = command_queue();
             break;
 
         case "equal":
-            msg = await command_equal(args);
+            promise = command_equal(args);
             break;
         
         case "playlist":
-            msg = await command_playlist(client, message, args);
+            promise = command_playlist(client, message, args);
             break;
 
         case "help":
-            msg = await command_help(args);
+            promise = command_help(args);
             break;
 
         case "chat":
-            msg = await command_chat(message, args);
+            promise = command_chat(args);
             break;
 
         case "draw":
-            msg = await command_draw(message, args);
+            promise = command_draw(message, args);
             break;
 
         case "refresh":
-            msg = await command_refresh();
+            promise = command_refresh();
             break;
 
         case "picture":
-            msg = await command_picture(message, args);
+            promise = command_picture(args);
             break;
         
         case "anime":
-            msg = await command_anime(message, args);
+            promise = command_anime(args);
+            break;
+        
+        default:
+            valid = false;
             break;
     }
+    if (!valid)
+        return;
+
+    var waiting = true;
+    await message.channel.sendTyping();
+    var interval = setInterval(() =>
+    {
+        if (waiting)
+            message.channel.sendTyping();
+        else
+            clearInterval(interval);
+    }, 1000)
+    var msg = await promise;
+    waiting = false;
+
     for (var i = 0; i < msg.length; i++)
     {
         if (msg[i] == null)
+        {
+            await message.channel.send("Выполнено");
             break;
-        message.channel.send(msg[i]);
+        }
+        await message.channel.send(msg[i]);
     }
 }
 

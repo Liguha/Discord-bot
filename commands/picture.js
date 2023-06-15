@@ -10,7 +10,7 @@ const formats =
     "square": [512, 512]
 }
 
-async function command_picture(message, args)
+async function command_picture(args)
 {   
     var size = formats[args[0]];
     if (size == undefined)
@@ -66,17 +66,14 @@ async function command_picture(message, args)
     };
     let promise = new Promise((resolve, reject) => 
     {
-        message.channel.sendTyping();
         var interval = setInterval(() => 
         {
-            if (waiting)
-                message.channel.sendTyping();
-            else
+            if (!waiting)
             {
                 clearInterval(interval);
                 resolve();
             }
-        }, 10000);
+        }, 500);
     });
     await promise;
     return [msg];

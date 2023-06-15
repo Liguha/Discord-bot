@@ -72,21 +72,12 @@ function make_messages(text)
     return msg;
 }
 
-async function command_chat(message, args)
+async function command_chat(args)
 {
     var str = 'Ответь как быдло: ';
     for (var i = 0; i < args.length; i++)
         str += args[i] + ' ';
-    message.channel.sendTyping();
-    var completion = -1;
-    var interval = setInterval(() => 
-    {
-        if (completion == -1)
-            message.channel.sendTyping();
-        else
-            clearInterval(interval);
-    }, 10000);
-
+    
     history.push({role: "user", content: str});
     msg = -1;
     var completion = await openai.createChatCompletion(
@@ -107,15 +98,6 @@ async function command_draw(message, args)
     var str = "";
     for (var i = 0; i < args.length; i++)
         str += args[i] + ' ';
-    message.channel.sendTyping();
-    var ended = false;
-    var interval = setInterval(() => 
-    {
-        if (!ended)
-            message.channel.sendTyping();
-        else
-            clearInterval(interval);
-    }, 10000);
     var image = message.attachments.values().next().value;
     var response = -1, ans = -1;
     if (image != null && image.contentType == "image/png")
@@ -153,7 +135,6 @@ async function command_draw(message, args)
         var stream = await promise;
         ans = {files: [new AttachmentBuilder(stream)]};
     }
-    ended = true;
     return [ans];
 }
 

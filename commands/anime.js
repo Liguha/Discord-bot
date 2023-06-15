@@ -72,21 +72,11 @@ async function generate_image(prompt, key)
     return stream;
 }
 
-async function command_anime(message, args)
+async function command_anime(args)
 {
     var n = Number(args[0]);
     if (isNaN(n) || !(1 <= n && n <= 9))
         return [await rephrase(errors.anime.invalid_n)];
-
-    var waiting = true;
-    message.channel.sendTyping();
-    var interval = setInterval(() => 
-    {
-        if (waiting)
-            message.channel.sendTyping();
-        else
-            clearInterval(interval);
-    }, 10000);
 
     var prompt = "";
     for (var i = 1; i < args.length; i++)
@@ -100,7 +90,6 @@ async function command_anime(message, args)
         var stream = await promise[i];
         files.push(new AttachmentBuilder(stream));
     }
-    waiting = false;
     return [{files: files}];
 }
 
