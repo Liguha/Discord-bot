@@ -1,9 +1,9 @@
 const file = require("../json/playlists.json");
 const errors = require("../json/error_reports.json");
-const { rephrase } = require("./openai_module.js");
-const { command_play } = require("../commands/player_module.js");
+const { rephrase } = require("./chat.js");
+const { command_play } = require("../commands/play.js");
 
-async function command_playlist(client, message, args)
+async function command_playlist({client, message, args})
 {
     switch (args.shift())
     {
@@ -130,7 +130,7 @@ async function command_playlist(client, message, args)
                 for (var i = 0; i < file.body[n].size; i++)
                 {
                     var k = i + 1;
-                    msg += k + "\. " + (await command_play(message, [file.body[n].tracks[i]])) + "\n";
+                    msg += k + "\. " + (await command_play({message: message, args: [file.body[n].tracks[i]]})) + "\n";
                 }
             }
             return [msg];

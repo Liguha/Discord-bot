@@ -1,6 +1,6 @@
 const vosk = require("vosk");
 const errors = require("../json/error_reports.json");
-const { rephrase } = require("./openai_module.js");
+const { rephrase } = require("../commands/chat.js");
 const model = new vosk.Model("./resources/model_debug/");
 
 const { OpusEncoder } = require('@discordjs/opus');
@@ -8,8 +8,8 @@ const { getVoiceConnection } = require('@discordjs/voice');
 const encoder = new OpusEncoder(48000, 1);
 
 const config = require("../json/dynamic_config.json");
-const { same_voice } = require('./members.js');
-const { perform_command } = require("../scripts/performer.js");
+const { same_voice } = require('../commands/members.js');
+const { perform_command } = require("./performer.js");
 
 var listen = new Map();
 

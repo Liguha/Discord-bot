@@ -1,8 +1,8 @@
 const { getVoiceConnection } = require('@discordjs/voice');
 const errors = require("../json/error_reports.json");
-const { rephrase } = require("./openai_module.js");
+const { rephrase } = require("./chat.js");
 
-async function command_members(message)
+async function command_members({message})
 {
     var bot = message.guild.members.me;
     if (bot.voice.channel === null)

@@ -1,7 +1,7 @@
 const WebSocket = require("ws");
 const { AttachmentBuilder } = require('discord.js');
 const errors = require("../json/error_reports.json");
-const { rephrase } = require("./openai_module.js");
+const { rephrase } = require("./chat.js");
 
 const formats = 
 {
@@ -10,7 +10,7 @@ const formats =
     "square": [512, 512]
 }
 
-async function command_picture(args)
+async function command_picture({args})
 {   
     var size = formats[args[0]];
     if (size == undefined)

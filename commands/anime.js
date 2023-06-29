@@ -1,62 +1,38 @@
 const config = require("../json/static_config.json");
 const errors = require("../json/error_reports.json");
-const https = require('https');
-const { AttachmentBuilder } = require('discord.js');
-const { rephrase } = require("./openai_module.js");
+const https = require("https");
+const { send_request, string_params } = require("../scripts/https_requests");
+const { AttachmentBuilder } = require("discord.js");
+const { rephrase } = require("./chat.js");
 
-async function send_request(options, data = null)
+async function generate_image(prompt)
 {
-    var promise = new Promise((resolve) =>
+    var generate_data =
     {
-        var req = https.request(options, (res) =>
-        {
-            res.on("data", (json) => resolve(String(json)));
-        });
-        if (data != null)
-            req.write(JSON.stringify(data));
-        req.end();
-    });
-    var raw = await promise;
-    return JSON.parse(raw);
-}
-
-var generate =
-{
-    host: "api.prodia.com",
-    path: "/generate?<data>",
-    method: "GET"
-}
-
-var check =
-{
-    host: "api.prodia.com",
-    path: "/job/<job>",
-    method: "GET"
-}
-
-function make_path(prompt, key = null)
-{
-    var res = "/generate?new=true&prompt=";
-    for (var i = 0; i < prompt.length; i++)
-    {
-        if (("A" <= prompt[i] && prompt[i] <= "Z") || ("a" <= prompt[i] && prompt[i] <= "z"))
-            res += prompt[i];
-        else
-            res += "%" + prompt.charCodeAt(i).toString(16);
+        new: true,
+        prompt: prompt,
+        model: "anything-v4.5-pruned.ckpt [65745d25]",
+        negative_prompt: "",
+        steps: 50,
+        cfg: 7,
+        seed: Math.floor(Math.random() * 9999999999),
+        sampler: "Heun",
+        key: config.anime_api
     }
-    res += "&model=anything-v4.5-pruned.ckpt+%5B65745d25%5D&negative_prompt=&steps=50&cfg=7&seed=";
-    res += Math.floor(Math.random() * 9999999999);
-    res += "&sampler=Heun";
-    if (key != null)
-        res += "&key=" + key;
-    return res;
-}
+    var generate_options =
+    {
+        host: "api.prodia.com",
+        path: "/generate?" + string_params(generate_data),
+        method: "GET"
+    }
+    var info = await send_request(generate_options);
 
-async function generate_image(prompt, key)
-{
-    generate.path = make_path(prompt, key);
-    var info = await send_request(generate);
-    check.path = "/job/" + info.job;
+    var check =
+    {
+        host: "api.prodia.com",
+        path: "/job/" + info.job,
+        method: "GET"
+    }
     while (true)
     {
         var state = await send_request(check);
@@ -72,7 +48,7 @@ async function generate_image(prompt, key)
     return stream;
 }
 
-async function command_anime(args)
+async function command_anime({args})
 {
     var n = Number(args[0]);
     if (isNaN(n) || !(1 <= n && n <= 9))
@@ -84,7 +60,7 @@ async function command_anime(args)
     var promise = [];
     var files = [];
     for (var i = 0; i < n; i++)
-        promise.push(generate_image(prompt, config.anime_api));
+        promise.push(generate_image(prompt));
     for (var i = 0; i < n; i++)
     {
         var stream = await promise[i];

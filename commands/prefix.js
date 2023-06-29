@@ -1,6 +1,6 @@
 const config = require("../json/dynamic_config.json");
 
-async function command_prefix(args)
+async function command_prefix({args})
 {
     var prefix = '>';
     if (args.length > 0)

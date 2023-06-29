@@ -1,9 +1,7 @@
 {
-    "bot_token": "тут токен бота Discord",
-    "youtube_coockie": "тут ютубовские куки",
-    "openai_api": 
-    [
-        "тут API ключ OpenAI"
-    ],
-    "anime_api": "тут ключ для prodia"
+    "bot_token": "токен бота",
+    "youtube_cookie": "cookie от Youtube при залогиненом аккаунте",
+    "yandex_cookie": "cookie от Яндекс.Музыки при залогиненом аккаунте",
+    "openai_api": "api ключ от Open AI",
+    "anime_api": "api ключ с prodia"
 }

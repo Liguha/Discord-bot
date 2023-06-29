@@ -1,8 +1,8 @@
 const help = require("../json/help_note.json");
 const errors = require("../json/error_reports.json");
-const { rephrase } = require("./openai_module.js");
+const { rephrase } = require("./chat.js");
 
-async function command_help(args)
+async function command_help({args})
 {
     var cur_help = help;
     while (args.length != 0 && cur_help != undefined)

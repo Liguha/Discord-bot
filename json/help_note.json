@@ -1,5 +1,5 @@
 {
-    "general": "Список команд: help, playlist, play, join, skip, remove, clear, queue, recognize, equal, prefix, vprefix, chat, refresh, draw, picture, anime. Для более подробной справки можно указать другие команды аргументами. Например, >help play или >help equal list",
+    "general": "Список команд: help, playlist, play, yplay, join, skip, remove, clear, queue, recognize, equal, prefix, vprefix, chat, refresh, draw, picture, anime. Для более подробной справки можно указать другие команды аргументами. Например, >help play или >help equal list",
 
     "help":
     {
@@ -54,6 +54,11 @@
     "play":
     {
         "general": "Команда для добавления композиции в очередь. Если бот не в голосовом канале, то он зайдёт (аналогично join). Аргументами указывается запрос (>play <название композиции>). Пример: >play стон мужика"
+    },
+
+    "yplay":
+    {
+        "general": "Команда для добавления композиций из Яндекс.Музыки в очередь. Использование аналогично play с отличием, что если передать ссылку на плейлист, то будут добавлены песни из него."
     },
 
     "skip":

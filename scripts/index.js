@@ -4,7 +4,7 @@ const express = require('express');
 const static_config = require("../json/static_config.json");
 const dynamic_config = require("../json/dynamic_config.json");
 
-const { command_recognize } = require("../commands/recognition_module.js");
+const { command_recognize } = require("./recognition_module.js");
 const { perform_command } = require("./performer.js");
 require("./saver.js");
 

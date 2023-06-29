@@ -1,7 +1,7 @@
 const { joinVoiceChannel } = require('@discordjs/voice');
 const { alone_in_voice, same_voice } = require('./members.js');
 const errors = require("../json/error_reports.json");
-const { rephrase } = require("./openai_module.js");
+const { rephrase } = require("./chat.js");
 
 // ммм, кайф, как говорят разрабы диса "change ... that brokes some apps"
 function fix_connection(voiceConnection)
@@ -22,7 +22,7 @@ function fix_connection(voiceConnection)
     voiceConnection.on('error', () => console.log("Error voice")); 
 }
 
-async function command_join(message)
+async function command_join({message})
 {
     if (!alone_in_voice(message))
     {

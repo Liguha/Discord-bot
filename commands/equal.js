@@ -1,8 +1,8 @@
 const config = require("../json/dynamic_config.json");
 const errors = require("../json/error_reports.json");
-const { rephrase } = require("./openai_module.js");
+const { rephrase } = require("./chat.js");
 
-async function command_equal(args)
+async function command_equal({args})
 {
     switch (args.shift())
     {
