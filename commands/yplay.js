@@ -1,5 +1,6 @@
 const config = require("../json/static_config.json");
 const errors = require("../json/error_reports.json");
+const https = require("https");
 const { createAudioResource } = require('@discordjs/voice');
 const { send_request, string_params } = require("../scripts/https_requests");
 const { queue_push } = require("../scripts/player_queue.js");
@@ -146,10 +147,17 @@ function is_playlist(prompt)
 
 async function get_resource(id)
 {
-    var url = await ym_audio_by_id(id);
-    var resource = createAudioResource(url, 
+    var ref = await ym_audio_by_id(id);
+    var url = new URL(ref);
+    var promise = new Promise((resolve) => 
+    {
+        https.get(url, (stream) => resolve(stream));
+    });
+    var stream = await promise;
+    var resource = createAudioResource(stream, 
     {
         silencePaddingFrames: 50,
+        inlineVolume: true
     });
     return resource;
 }

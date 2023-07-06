@@ -18,7 +18,7 @@ async function rephrase(orig)
     {
         model: "gpt-3.5-turbo",
         messages: [{role: "user", content: str}]
-    }).catch((err) => res = errors.openai_module.rephrase_err);
+    }).catch((err) => res = orig);
     if (res == -1)
         res = completion.data.choices[0].message.content;
     return res;

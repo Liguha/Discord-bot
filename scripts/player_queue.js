@@ -26,15 +26,6 @@ function fix_connection(voiceConnection)
     voiceConnection.on('error', () => console.log("Error voice")); 
 }
 
-var ex =
-{
-    prompt: "song 1",
-    data: "something",
-    output: "message",
-    success: true,
-    get_resource: () => console.log("first")
-}
-
 async function queue_shift()
 {
     if (songsQueue.length == 0)
@@ -64,7 +55,7 @@ async function queue_push(message, song)
         songsQueue = [];
         songsQueue.push(song);
         connection.subscribe(player);
-        queue_shift();
+        await queue_shift();
         return [song.prompt + " => " + song.output];
     }
     if (same_voice(message))
@@ -77,7 +68,7 @@ async function queue_push(message, song)
         }
         songsQueue.push(song);
         if (songsQueue.length === 1)
-            queue_shift();
+            await queue_shift();
         return [song.prompt + " => " + song.output];
     }
     return [await rephrase(errors.player_module.already_use)];

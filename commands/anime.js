@@ -11,12 +11,14 @@ async function generate_image(prompt)
     {
         new: true,
         prompt: prompt,
-        model: "anything-v4.5-pruned.ckpt [65745d25]",
+        // model: "anything-v4.5-pruned.ckpt [65745d25]",
+        model: "anythingv3_0-pruned.ckpt [2700c435]",
         negative_prompt: "",
         steps: 50,
-        cfg: 7,
+        cfg: 15,
         seed: Math.floor(Math.random() * 9999999999),
-        sampler: "Heun",
+        // sampler: "Heun",
+        sampler: "DPM++ 2M Karras",
         key: config.anime_api
     }
     var generate_options =
